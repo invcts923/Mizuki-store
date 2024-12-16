@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIZUKI - Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-x: hidden;
+            background: url('https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzZhbG16bHdjbmc0d3g1aWg5ZWY3eDF0dzB6M2o2bnFkcDB5M3Q2cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohs81Mu53JsGwngSA/giphy.gif') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            text-align: center;
+            background: #141428;
+            padding: 5px 0;
+            font-size: 14px;
+            color: #99a3b1;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(15, 15, 30, 0.7);
+            border-bottom: 1px solid #222;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00b3ff;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+            .nav-links li {
+                margin: 0 10px;
+            }
+
+            .nav-links a {
+                text-decoration: none;
+                color: #fff;
+                font-size: 1em;
+                transition: color 0.3s;
+            }
+
+                .nav-links a.active,
+                .nav-links a:hover {
+                    color: #00b3ff;
+                }
+
+        .buttons button {
+            margin-left: 10px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .contact-btn {
+            background: #00b3ff;
+        }
+
+        .buy-btn {
+            background: #fbc531;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 50px;
+            background: rgba(15, 15, 30, 0.7);
+            border-radius: 10px;
+        }
+
+        .hero-text h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .hero-text p {
+            margin: 10px 0;
+            font-size: 1.1em;
+            color: #aab3c5;
+        }
+
+        .hero-text .highlight {
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .hero-buttons button {
+            margin-right: 15px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .media-btn {
+            background: #00b3ff;
+            color: #fff;
+        }
+
+        .hero-buy {
+            background: #fbc531;
+            color: #fff;
+        }
+
+        .hero-buttons button:hover {
+            transform: scale(1.05);
+        }
+
+        .hero-media {
+            text-align: center;
+        }
+
+        .video-placeholder {
+            width: 400px;
+            height: 225px;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+            .video-placeholder video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        /* Login Button and Modal Styles */
+        #loginBtn {
+            padding: 10px 20px;
+            background-color: #00b3ff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+            #loginBtn:hover {
+                background-color: #005f7f;
+            }
+
+        /* Floating Login Form (Hidden Initially) */
+        .login-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Background overlay */
+            backdrop-filter: blur(5px); /* Blur background */
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-modal {
+            background: rgba(255, 255, 255, 0.1); /* Glass effect */
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+            .login-modal input {
+                width: 100%;
+                padding: 10px;
+                margin: 10px 0;
+                background: rgba(255, 255, 255, 0.2);
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                font-size: 1em;
+            }
+
+            .login-modal button {
+                padding: 10px 20px;
+                background-color: #00b3ff;
+                color: white;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+                font-size: 1.1em;
+            }
+
+                .login-modal button:hover {
+                    background-color: #005f7f;
+                }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <header class="top-bar">
+        <p>➤ Join Discord to pay with Paypal and CreditCard!</p>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">MIZUKI</div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">HOME</a></li>
+            <li><a href="products.html">PRODUCTS</a></li>
+            <li><a href="status.html">STATUS</a></li>
+            <li><a href="vouches.html">VOUCHES</a></li>
+        </ul>
+        <div class="buttons">
+            <button onclick="window.open('https://discord.gg/zhJgBFnKfg')" class="buy-btn">BUY NOW!</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>WELCOME TO MIZUKI CHEATS!</h1>
+            <p>
+                Discover the most trusted and undetectable cheats with <strong>MIZUKI</strong>.<br>
+                Eliminate your enemies effortlessly and stay ahead of the game.<br>
+                <span class="highlight">Undetected Cheats!</span> available now.
+            </p>
+            <div class="hero-buttons">
+                <button class="media-btn" onclick="window.location.href='products.html'">VIEW PRODUCTS</button>
+                <button class="buy-btn hero-buy" onclick="window.open('https://discord.gg/zhJgBFnKfg')">BUY NOW!</button>
+            </div>
+        </div>
+        <div class="hero-media">
+            <!-- Embedded YouTube Video (Set to autoplay) -->
+            <iframe width="560" height="315"
+                    src="https://www.youtube.com/embed/A_FTtIHliRE?autoplay=1"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </section>
+
+    <!-- Login Button -->
+    <button id="loginBtn" onclick="showLoginForm()">Login</button>
+
+    <!-- Login Modal (Hidden Initially) -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-modal">
+            <h2>Owner Login</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <button onclick="closeLoginForm()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Show login form (Floating Login)
+        function showLoginForm() {
+            document.getElementById('loginOverlay').style.display = 'flex';
+        }
+
+        // Close login form
+        function closeLoginForm() {
+            document.getElementById('loginOverlay').style.display = 'none';
+        }
+
+        const encodedUsername = "bWl6dWtpMTQz";
+        const encodedPassword = "bWl6dWtpMTQzMg==";
+
+        // Login validation
+        function login() {
+            const username = atob(encodedUsername);
+            const password = atob(encodedPassword);
+
+            const enteredUsername = document.getElementById("username").value;
+            const enteredPassword = document.getElementById("password").value;
+
+            if (enteredUsername === username && enteredPassword === password) {
+                alert("Login Successful!");
+                window.location.href = "owner_dashboard.html"; // Redirect after successful login
+            } else {
+                alert("Incorrect Username or Password.");
+            }
+        }
+    </script>
+</body>
+</html>

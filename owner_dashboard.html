@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIZUKI - Owner Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-x: hidden;
+            background: url('https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzZhbG16bHdjbmc0d3g1aWg5ZWY3eDF0dzB6M2o2bnFkcDB5M3Q2cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohs81Mu53JsGwngSA/giphy.gif') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .top-bar, .navbar, .content, .buttons {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .form-container {
+            background: #1e1e2d;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+            .form-container input, .form-container select, .form-container textarea, .form-container button {
+                margin: 10px 0;
+                padding: 10px;
+                width: 100%;
+                border: none;
+                border-radius: 5px;
+            }
+
+            .form-container select, .form-container textarea {
+                background-color: #2a2a2a;
+                color: #fff;
+            }
+
+        .buttons button {
+            margin-top: 10px;
+            background: #00b3ff;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        /* Product List */
+        .product-list {
+            margin-top: 30px;
+            background: #1e1e2d;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .product-item {
+            background: #2a2a2a;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .product-item button {
+                background-color: #ff6f61;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+                border-radius: 5px;
+                color: white;
+            }
+
+                .product-item button.edit {
+                    background-color: #ffcc00;
+                }
+
+        /* Button for Vouches Upload (fixed bottom left) */
+        .vouches-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #ff6f61;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+            .vouches-button:hover {
+                background-color: #ff4b3a;
+            }
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <p>➤ Join Discord to pay with Paypal and CreditCard!</p>
+    </header>
+
+    <nav class="navbar">
+        <div class="logo">MIZUKI</div>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="products.html">PRODUCTS</a></li>
+            <li><a href="status.html">STATUS</a></li>
+            <li><a href="vouches.html">VOUCHES</a></li>
+        </ul>
+    </nav>
+
+    <section class="content">
+        <h1>Manage Products</h1>
+        <p>Upload, Edit, or Delete products below.</p>
+
+        <!-- Product Upload Form -->
+        <div class="form-container">
+            <form id="productForm">
+                <input type="text" id="productName" placeholder="Product Name" required>
+                <input type="file" id="productImage" accept="image/*" required>
+                <input type="number" id="productPrice" placeholder="Price" required>
+                <textarea id="productDescription" placeholder="Product Description" rows="4" required></textarea>
+                <select id="statusSelect" required>
+                    <option value="">Select Status</option>
+                    <option value="Undetectable">Undetectable</option>
+                    <option value="Updating">Updating</option>
+                    <option value="Detected">Detected</option>
+                </select>
+                <button type="submit">Add Product</button>
+            </form>
+        </div>
+
+        <!-- Existing Products -->
+        <div class="product-list" id="productList">
+            <h2>Existing Products</h2>
+            <!-- Product items will be dynamically loaded here -->
+        </div>
+    </section>
+
+    <!-- Button to go to Vouches Upload Page -->
+    <a href="vouchesupload.html" class="vouches-button">Go to Vouches Upload</a>
+
+    <script>
+        // Handle form submission to add or edit products
+        document.getElementById('productForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent form from submitting
+
+            const productName = document.getElementById('productName').value;
+            const productImage = document.getElementById('productImage').files[0];
+            const productPrice = document.getElementById('productPrice').value;
+            const productDescription = document.getElementById('productDescription').value;
+            const productStatus = document.getElementById('statusSelect').value;
+
+            // Validate image file
+            if (productImage) {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    const imageBase64 = reader.result;
+
+                    const currentStatuses = JSON.parse(localStorage.getItem('cheatStatus')) || {};
+
+                    // Add new or update product details
+                    if (productName && productPrice && productDescription && productStatus) {
+                        currentStatuses[productName] = {
+                            status: productStatus,
+                            image: imageBase64,
+                            price: productPrice,
+                            description: productDescription
+                        };
+
+                        // Save to localStorage
+                        localStorage.setItem('cheatStatus', JSON.stringify(currentStatuses));
+                        alert('Product added/updated successfully!');
+                        loadProducts(); // Refresh product list
+                    } else {
+                        alert('Please fill in all fields.');
+                    }
+
+                    // Reset the form
+                    document.getElementById('productForm').reset();
+                };
+                reader.readAsDataURL(productImage);
+            }
+        });
+
+        // Load products from localStorage and display them
+        function loadProducts() {
+            const productList = document.getElementById('productList');
+            const products = JSON.parse(localStorage.getItem('cheatStatus')) || {};
+
+            productList.innerHTML = ''; // Clear current list
+
+            // Loop through and display each product
+            for (const [name, details] of Object.entries(products)) {
+                const productItem = document.createElement('div');
+                productItem.classList.add('product-item');
+                productItem.innerHTML = `
+                            <div>
+                                <strong>${name}</strong><br>
+                                <span>Status: <span class="${details.status === 'Undetectable' ? 'status-active' : details.status === 'Updating' ? 'status-updating' : 'status-detected'}">${details.status}</span></span><br>
+                                <span>Price: $${details.price}</span><br>
+                                <span>Description: ${details.description}</span>
+                            </div>
+                            <div>
+                                <button class="edit" onclick="editProduct('${name}')">Edit</button>
+                                <button class="delete" onclick="deleteProduct('${name}')">Delete</button>
+                            </div>
+                        `;
+                productList.appendChild(productItem);
+            }
+        }
+
+        // Edit product
+        function editProduct(productName) {
+            const products = JSON.parse(localStorage.getItem('cheatStatus')) || {};
+            const product = products[productName];
+
+            document.getElementById('productName').value = productName;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productDescription').value = product.description;
+            document.getElementById('statusSelect').value = product.status;
+
+            // Remove the product from localStorage before updating
+            delete products[productName];
+            localStorage.setItem('cheatStatus', JSON.stringify(products));
+        }
+
+        // Delete product
+        function deleteProduct(productName) {
+            const products = JSON.parse(localStorage.getItem('cheatStatus')) || {};
+
+            if (confirm(`Are you sure you want to delete ${productName}?`)) {
+                delete products[productName];
+                localStorage.setItem('cheatStatus', JSON.stringify(products));
+                loadProducts(); // Refresh the product list
+            }
+        }
+
+        // Load the products when the page loads
+        window.onload = loadProducts;
+    </script>
+</body>
+</html>

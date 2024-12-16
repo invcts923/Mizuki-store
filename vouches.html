@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIZUKI - Vouches</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-x: hidden;
+            background: url('https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzZhbG16bHdjbmc0d3g1aWg5ZWY3eDF0dzB6M2o2bnFkcDB5M3Q2cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohs81Mu53JsGwngSA/giphy.gif') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .top-bar, .navbar, .content {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .navbar {
+            padding: 10px;
+            background-color: #1e1e2d;
+        }
+
+            .navbar .logo {
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+
+            .navbar .nav-links {
+                list-style: none;
+                padding: 0;
+            }
+
+                .navbar .nav-links li {
+                    display: inline-block;
+                    margin: 0 15px;
+                }
+
+                    .navbar .nav-links li a {
+                        color: #fff;
+                        text-decoration: none;
+                        font-size: 1.1rem;
+                    }
+
+                        .navbar .nav-links li a.active {
+                            font-weight: bold;
+                            color: #00b3ff;
+                        }
+
+            .navbar .buttons {
+                margin-top: 20px;
+            }
+
+                .navbar .buttons button {
+                    background: #00b3ff;
+                    color: white;
+                    font-size: 1rem;
+                    cursor: pointer;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                }
+
+        .content {
+            margin-top: 40px;
+        }
+
+            .content h1 {
+                font-size: 2rem;
+            }
+
+            .content p {
+                font-size: 1.1rem;
+                margin: 10px 0;
+            }
+
+        /* Vouch List Section */
+        .vouch-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Vouch Item Styles */
+        .vouch-item {
+            background: #1e1e2d;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+            /* Image Styles */
+            .vouch-item img {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                margin-right: 15px;
+                transition: transform 0.3s ease, filter 0.3s ease;
+            }
+
+            .vouch-item:hover img {
+                transform: scale(1.1);
+                filter: brightness(1.2);
+            }
+
+            .vouch-item:hover {
+                transform: translateY(-10px);
+            }
+
+            .vouch-item .vouch-content {
+                color: #fff;
+            }
+
+                .vouch-item .vouch-content h3 {
+                    font-size: 1.2rem;
+                    margin: 10px 0;
+                    font-weight: bold;
+                }
+
+                .vouch-item .vouch-content p {
+                    font-size: 1rem;
+                    color: #bbb;
+                }
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <p>➤ Join Discord to pay with Paypal and CreditCard!</p>
+    </header>
+
+    <nav class="navbar">
+        <div class="logo">MIZUKI</div>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="products.html">PRODUCTS</a></li>
+            <li><a href="status.html">STATUS</a></li>
+            <li><a href="vouches.html" class="active">VOUCHES</a></li>
+        </ul>
+        <div class="buttons">
+            <button onclick="window.open('https://discord.gg/zhJgBFnKfg')" class="buy-btn">BUY NOW!</button>
+        </div>
+    </nav>
+
+    <section class="content">
+        <h1>Customer Vouches</h1>
+        <p>See what our happy customers say:</p>
+        <div class="vouch-list" id="vouchList">
+            <!-- Vouches will be displayed here dynamically -->
+        </div>
+    </section>
+
+    <script>
+        // Load vouches from localStorage and display them
+        function loadVouches() {
+            const vouchList = document.getElementById('vouchList');
+            const vouches = JSON.parse(localStorage.getItem('vouches')) || [];
+
+            vouchList.innerHTML = ''; // Clear current list
+
+            // Loop through and display each vouch
+            vouches.forEach(vouch => {
+                const vouchItem = document.createElement('div');
+                vouchItem.classList.add('vouch-item');
+                vouchItem.innerHTML = `
+                        <div>
+                            <img src="${vouch.image}" alt="User Image">
+                        </div>
+                        <div class="vouch-content">
+                            <h3>${vouch.name}</h3>
+                            <p>"${vouch.text}"</p>
+                        </div>
+                    `;
+                vouchList.appendChild(vouchItem);
+            });
+        }
+
+        // Load the vouches when the page loads
+        window.onload = loadVouches;
+    </script>
+</body>
+</html>

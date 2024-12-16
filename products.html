@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIZUKI - Products</title>
+    <link rel="stylesheet" href="products.css">
+    <style>
+        /* Modal Style */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 80%;
+            max-height: 80%;
+            margin: auto;
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-x: hidden;
+            background: url('https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzZhbG16bHdjbmc0d3g1aWg5ZWY3eDF0dzB6M2o2bnFkcDB5M3Q2cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohs81Mu53JsGwngSA/giphy.gif') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* Header and Navigation */
+        .top-bar {
+            background-color: #111;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #222;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .navbar .logo {
+                color: #00b3ff;
+                font-size: 1.5em;
+                font-weight: bold;
+                padding-left: 20px;
+            }
+
+        .nav-links {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+            .nav-links li {
+                margin: 0 15px;
+            }
+
+            .nav-links a {
+                color: #fff;
+                text-decoration: none;
+                font-size: 1em;
+            }
+
+                .nav-links a:hover {
+                    color: #00b3ff;
+                }
+
+        /* Products Section */
+        .products-section {
+            padding: 50px 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            justify-items: center;
+            margin: 0 auto; /* Centers the grid */
+            max-width: 1200px; /* Set a max-width to prevent the grid from becoming too wide */
+        }
+
+        .product-card {
+            background-color: #1e1e2d;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+            .product-card img {
+                width: 100%;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                cursor: pointer;
+                transition: transform 0.3s ease-in-out;
+            }
+
+                .product-card img:hover {
+                    transform: scale(1.05);
+                }
+
+            .product-card h2 {
+                font-size: 1.2em;
+                margin-bottom: 10px;
+            }
+
+            .product-card p {
+                font-size: 1em;
+                line-height: 1.5;
+            }
+
+        .price {
+            font-size: 1.2em;
+            color: #00b3ff;
+            margin: 10px 0;
+        }
+
+        .buy-btn {
+            background-color: #00b3ff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+            .buy-btn:hover {
+                background-color: #009ac7;
+            }
+
+        /* Highlighting green text for words enclosed in ** */
+        .highlight {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <header class="top-bar">
+        <p>➤ Join Discord to pay with Paypal and CreditCard!</p>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">MIZUKI</div>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="products.html" class="active">PRODUCTS</a></li>
+            <li><a href="status.html">STATUS</a></li>
+            <li><a href="vouches.html">VOUCHES</a></li>
+        </ul>
+    </nav>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="section-header">
+            <h1>Our Products</h1>
+            <p>Explore our exclusive tools below and get started with the best cheats available.</p>
+        </div>
+
+        <div class="products-container" id="productsContainer">
+            <!-- Dynamic product cards will be inserted here -->
+        </div>
+    </section>
+
+    <!-- Fullscreen Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        // Function to load products from localStorage and display them
+        function loadProducts() {
+            const products = JSON.parse(localStorage.getItem('cheatStatus')) || {};
+            const productsContainer = document.getElementById('productsContainer');
+            productsContainer.innerHTML = '';
+
+            for (const [productName, productDetails] of Object.entries(products)) {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                const descriptionWithHighlights = productDetails.description.replace(/\*\*(.*?)\*\*/g, '<span class="highlight">$1</span>'); // Highlight text with **
+
+                productCard.innerHTML = `
+                        <img src="${productDetails.image}" alt="${productName}" class="product-image" onclick="openModal('${productDetails.image}')">
+                        <h2>${productName}</h2>
+                        <p>${descriptionWithHighlights}</p>
+                        <p class="price">$${productDetails.price}</p>
+                        <button class="buy-btn" onclick="window.open('https://discord.gg/zhJgBFnKfg')">BUY NOW</button>
+                    `;
+                productsContainer.appendChild(productCard);
+            }
+        }
+
+        // Function to open the modal and display the clicked image
+        function openModal(imageSrc) {
+            const modal = document.getElementById("imageModal");
+            const modalImage = document.getElementById("modalImage");
+            modal.style.display = "block";
+            modalImage.src = imageSrc;
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            const modal = document.getElementById("imageModal");
+            modal.style.display = "none";
+        }
+
+        // Load products when the page is loaded
+        window.onload = loadProducts;
+    </script>
+</body>
+</html>

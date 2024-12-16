@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIZUKI - Upload Vouch</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-x: hidden;
+            background: url('https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzZhbG16bHdjbmc0d3g1aWg5ZWY3eDF0dzB6M2o2bnFkcDB5M3Q2cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohs81Mu53JsGwngSA/giphy.gif') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .top-bar, .navbar, .content, .buttons {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .form-container {
+            background: #1e1e2d;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+            .form-container input, .form-container textarea, .form-container button {
+                margin: 10px 0;
+                padding: 10px;
+                width: 100%;
+                border: none;
+                border-radius: 5px;
+            }
+
+            .form-container textarea {
+                background-color: #2a2a2a;
+                color: #fff;
+            }
+
+        .buttons button {
+            background: #00b3ff;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .vouch-list {
+            margin-top: 30px;
+            background: #1e1e2d;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .vouch-item {
+            background: #2a2a2a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .vouch-item img {
+                max-width: 80px;
+                border-radius: 50%;
+                margin-right: 15px;
+            }
+
+        .edit-delete-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+            .edit-delete-btns button {
+                padding: 5px 10px;
+                background-color: #00b3ff;
+                color: #fff;
+                border-radius: 5px;
+                cursor: pointer;
+                border: none;
+            }
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <p>➤ Join Discord to pay with Paypal and CreditCard!</p>
+    </header>
+
+    <nav class="navbar">
+        <div class="logo">MIZUKI</div>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="products.html">PRODUCTS</a></li>
+            <li><a href="status.html">STATUS</a></li>
+            <li><a href="vouches.html">VOUCHES</a></li>
+        </ul>
+    </nav>
+
+    <section class="content">
+        <h1>Upload Your Vouch</h1>
+        <p>Share your experience with MIZUKI cheats!</p>
+
+        <!-- Vouch Upload Form -->
+        <div class="form-container">
+            <form id="vouchForm">
+                <input type="text" id="vouchName" placeholder="Your Name" required>
+                <textarea id="vouchText" placeholder="Your Vouch" rows="4" required></textarea>
+                <input type="file" id="vouchImage" accept="image/*" required>
+                <button type="submit">Submit Vouch</button>
+            </form>
+        </div>
+
+        <!-- Vouch List -->
+        <div class="vouch-list" id="vouchList">
+            <h2>Customer Vouches</h2>
+            <!-- Vouches will be displayed here dynamically -->
+        </div>
+    </section>
+
+    <script>
+        // Handle form submission to add vouch
+        document.getElementById('vouchForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent form from submitting
+
+            const vouchName = document.getElementById('vouchName').value;
+            const vouchText = document.getElementById('vouchText').value;
+            const vouchImage = document.getElementById('vouchImage').files[0];
+
+            // Validate image file
+            if (vouchImage) {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    const imageBase64 = reader.result;
+
+                    const vouchData = {
+                        name: vouchName,
+                        text: vouchText,
+                        image: imageBase64
+                    };
+
+                    // Save to localStorage (retrieve existing vouches)
+                    const existingVouches = JSON.parse(localStorage.getItem('vouches')) || [];
+                    existingVouches.push(vouchData);
+                    localStorage.setItem('vouches', JSON.stringify(existingVouches));
+
+                    alert('Vouch submitted successfully!');
+                    loadVouches(); // Refresh vouches list
+                };
+                reader.readAsDataURL(vouchImage);
+            }
+        });
+
+        // Function to edit a vouch
+        function editVouch(index) {
+            const vouches = JSON.parse(localStorage.getItem('vouches')) || [];
+            const vouch = vouches[index];
+
+            // Populate form with existing vouch data
+            document.getElementById('vouchName').value = vouch.name;
+            document.getElementById('vouchText').value = vouch.text;
+
+            // Remove the vouch and update the list
+            vouches.splice(index, 1);
+            localStorage.setItem('vouches', JSON.stringify(vouches));
+            loadVouches();
+        }
+
+        // Function to delete a vouch
+        function deleteVouch(index) {
+            const vouches = JSON.parse(localStorage.getItem('vouches')) || [];
+            vouches.splice(index, 1); // Remove vouch
+            localStorage.setItem('vouches', JSON.stringify(vouches));
+            loadVouches(); // Refresh vouches list
+        }
+
+        // Load vouches from localStorage and display them
+        function loadVouches() {
+            const vouchList = document.getElementById('vouchList');
+            const vouches = JSON.parse(localStorage.getItem('vouches')) || [];
+
+            vouchList.innerHTML = ''; // Clear current list
+
+            // Loop through and display each vouch
+            vouches.forEach((vouch, index) => {
+                const vouchItem = document.createElement('div');
+                vouchItem.classList.add('vouch-item');
+                vouchItem.innerHTML = `
+                            <div>
+                                <img src="${vouch.image}" alt="User Image">
+                            </div>
+                            <div>
+                                <p><strong>${vouch.name}</strong></p>
+                                <p>"${vouch.text}"</p>
+                            </div>
+                            <div class="edit-delete-btns">
+                                <button onclick="editVouch(${index})">Edit</button>
+                                <button onclick="deleteVouch(${index})">Delete</button>
+                            </div>
+                        `;
+                vouchList.appendChild(vouchItem);
+            });
+        }
+
+        // Load the vouches when the page loads
+        window.onload = loadVouches;
+    </script>
+</body>
+</html>
